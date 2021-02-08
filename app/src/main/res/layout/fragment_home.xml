@@ -13,54 +13,63 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             tools:context=".view.HomeFragment">
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/homeRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="8dp"
-                android:layout_margin="32dp"
-                android:background="@drawable/mission_window"
-                app:layout_constraintBottom_toTopOf="@id/centerline"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/homeTitle"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/missionCompleteRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="8dp"
-                android:layout_margin="32dp"
-                android:background="@drawable/mission_window"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/centerline"/>
 
         <TextView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:text="@{homeVm.title}"
-                android:gravity="center"
-                android:id="@+id/homeTitle"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/createMission"
-                app:layout_constraintBottom_toBottomOf="@+id/createMission"/>
-        <Button
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:id="@+id/createMission"
-                android:text="미션추가"
-                android:onClick="@{()->homeFrag.createMission()}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+            android:id="@+id/homeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="265dp"
+            android:gravity="top"
+            android:textSize="20sp"
+            android:letterSpacing="-0.03"
+            android:lineSpacingExtra="0sp"
+            android:textColor="#8587FE"
+            android:fontFamily="@font/maplestory_bold"
+            android:text="올때쭈쭈바"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <View android:layout_width="match_parent" android:layout_height="0.1dp"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintBottom_toBottomOf="parent"
-              android:id="@+id/centerline" app:layout_constraintTop_toBottomOf="@+id/homeTitle"/>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/home_viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_tabLayout" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/home_tabLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="95dp"
+            app:tabPaddingStart="-1dp"
+            app:tabPaddingEnd="-1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/homeTitle"
+            app:tabGravity="center"
+            app:tabMode="fixed"
+            app:tabTextColor="#000" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/createMission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:foreground="@drawable/ic_baseline_add_24"
+            android:onClick="@{()->homeFrag.createMission()}"
+            android:text="미션추가"
+            app:backgroundTint="#8587FE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -20,9 +20,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 
-
 class MainActivity : AppCompatActivity() {
-    private val TAG = "로그 ${this.javaClass.simpleName}"
+    private val  TAG : String = "로그 ${this.javaClass.simpleName}"
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var homeViewModel: HomeViewModel
@@ -33,12 +32,12 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         handleDeepLink()
         homeViewModel = ViewModelProvider(
-            this,
-            HomeInjector().provideViewModelFactory()
+                this,
+                HomeInjector().provideViewModelFactory()
         ).get(
-            HomeViewModel::class.java
+                HomeViewModel::class.java
         )
-
+        
         connectAdapter()
         getMyInfo()
         observeViewModels()
@@ -46,11 +45,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeViewModels() {
         homeViewModel.myInfo.observe(
-            this,
-            Observer { member ->
-                member ?: return@Observer
-                showToast("${member.nickname ?: "새로운 참가자"}님 환영합니다!")
-            }
+                this,
+                Observer { member ->
+                    member ?: return@Observer
+                    showToast("${member.nickname ?: "새로운 참가자"}님 환영합니다!")
+                }
         )
         homeViewModel.jobSucceedOrFail.observe(this) { msg ->
             this.showToast(msg)
@@ -66,56 +65,60 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun connectAdapter() {
         val tabIconList: List<Drawable?> = listOf(
-            resources.getDrawable(R.drawable.ic_outline_assignment_24, null),
-            resources.getDrawable(R.drawable.ic_baseline_calendar_today_24, null),
-            resources.getDrawable(R.drawable.ic_outline_settings_24, null),
-            )
+                resources.getDrawable(R.drawable.home, null),
+                resources.getDrawable(R.drawable.bookmark, null),
+                resources.getDrawable(R.drawable.mypage, null),
+        )
         binding.mainViewpager.adapter = CustomFragmentAdapter(this)
         TabLayoutMediator(binding.tabLayout, binding.mainViewpager) { tab, position ->
             tab.icon = tabIconList[position]
         }.attach()
+        /**
+         * 메인 탭은 슬라이드 안되게 설정. 홈프레그먼트의 필터 부분만 슬라이드 가능하도록 통일
+         */
+        binding.mainViewpager.isUserInputEnabled = false
     }
 
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount == 0 &&
-            moveTaskToBack(false)
+                moveTaskToBack(false)
         ) return
         super.onBackPressed()
     }
 
     private fun handleDeepLink() {
         Firebase.dynamicLinks
-            .getDynamicLink(intent)
-            .addOnSuccessListener(this) { pendingDynamicLinkData ->
-                // Get deep link from result (may be null if no link is found)
-                val deeplinkData = intent.data
-                deeplinkData?:return@addOnSuccessListener
-                Log.d(TAG, "MainActivity ~ handleDeepLink() called ${deeplinkData.getQueryParameters("fKey")}")
-                val familyId = deeplinkData.getQueryParameters("fKey")[0]
-                homeViewModel.handleEvent(HomeEvent.OnJoinFamily(familyId))
-                
-                // pendingDynamicLinkData는 계속 null만 나옴
-                Log.d(TAG, "MainActivity ~ handleDeepLink() called $pendingDynamicLinkData")
-                if (pendingDynamicLinkData == null) {
-                    Log.d(TAG, "No have dynamic link")
-                    return@addOnSuccessListener
-                }
-                val deepLink: Uri = pendingDynamicLinkData.link!!
-                Log.d(TAG, "deepLink: $deepLink")
+                .getDynamicLink(intent)
+                .addOnSuccessListener(this) { pendingDynamicLinkData ->
+                    // Get deep link from result (may be null if no link is found)
+                    val deeplinkData = intent.data
+                    deeplinkData ?: return@addOnSuccessListener
+                    Log.d(TAG, "MainActivity ~ handleDeepLink() called ${deeplinkData.getQueryParameters("fKey")}")
+                    val familyId = deeplinkData.getQueryParameters("fKey")[0]
+                    homeViewModel.handleEvent(HomeEvent.OnJoinFamily(familyId))
 
-                // Handle the deep link. For example, open the linked
-                // content, or apply promotional credit to the user's
-                // account.
-                // ...
-                when (deepLink.lastPathSegment) {
-                    "FAMILY_CODE" -> {
-                        val code: String? = deepLink.getQueryParameter("FAMILY_CODE")
-                        Log.d(TAG, "MainActivity ~ handleDeepLink() called $code")
+                    // pendingDynamicLinkData는 계속 null만 나옴
+                    Log.d(TAG, "MainActivity ~ handleDeepLink() called $pendingDynamicLinkData")
+                    if (pendingDynamicLinkData == null) {
+                        Log.d(TAG, "No have dynamic link")
+                        return@addOnSuccessListener
                     }
+                    val deepLink: Uri = pendingDynamicLinkData.link!!
+                    Log.d(TAG, "deepLink: $deepLink")
+
+                    // Handle the deep link. For example, open the linked
+                    // content, or apply promotional credit to the user's
+                    // account.
+                    // ...
+                    when (deepLink.lastPathSegment) {
+                        "FAMILY_CODE" -> {
+                            val code: String? = deepLink.getQueryParameter("FAMILY_CODE")
+                            Log.d(TAG, "MainActivity ~ handleDeepLink() called $code")
+                        }
+                    }
+                    // ...
                 }
-                // ...
-            }
-            .addOnFailureListener(this) { e -> Log.w(TAG, "getDynamicLink:onFailure", e) }
+                .addOnFailureListener(this) { e -> Log.w(TAG, "getDynamicLink:onFailure", e) }
 
     }
 

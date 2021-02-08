@@ -19,10 +19,10 @@ abstract class BaseFragment<T : ViewDataBinding>(private val layoutName: Fragmen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeViewModel = ViewModelProvider(
-            requireActivity(),
-            HomeInjector().provideViewModelFactory()
+                requireActivity(),
+                HomeInjector().provideViewModelFactory()
         ).get(
-            HomeViewModel::class.java
+                HomeViewModel::class.java
         )
     }
 
@@ -35,11 +35,12 @@ abstract class BaseFragment<T : ViewDataBinding>(private val layoutName: Fragmen
             is FragmentLayout.MissionDetailFragment -> R.layout.fragment_mission_detail
             is FragmentLayout.MyMissionFragment -> R.layout.fragment_my_mission
             is FragmentLayout.MyMissionListFragment -> R.layout.fragment_my_mission_list
+            is FragmentLayout.MissionList -> R.layout.fragment_mission_list
         }
         binding = DataBindingUtil.inflate(inflater, layout, container, false)
         binding.lifecycleOwner = this
         return binding.root
     }
 
-    open fun observeViewModels(){}
+    open fun observeViewModels() {}
 }

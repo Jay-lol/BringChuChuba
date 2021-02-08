@@ -42,7 +42,7 @@ class SetExpireAtDialog : Dialog {
                 timePicker.minute
             )
             val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm")
-            val time = sdf.format(Date(calendar.timeInMillis))
+            val time : String = sdf.format(Date(calendar.timeInMillis))
             callback(time)
             dismiss()
         }

@@ -8,4 +8,5 @@ sealed class FragmentLayout {
     object MissionDetailFragment : FragmentLayout()
     object MyMissionFragment : FragmentLayout()
     object MyMissionListFragment : FragmentLayout()
+    object MissionList : FragmentLayout()
 }
